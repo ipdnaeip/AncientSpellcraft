@@ -75,7 +75,7 @@ public class Covenant extends SpellRay {
 							changeStatus = false;
 						}
 
-						endAlliance((EntityWizard) oldWizard);
+						endAlliance(player, (EntityWizard) oldWizard);
 						player.sendStatusMessage(new TextComponentTranslation("spell.ancientspellcraft:covenant.no_longer_following", oldWizard.getDisplayName()), false);
 					}
 
@@ -112,8 +112,8 @@ public class Covenant extends SpellRay {
 		return false;
 	}
 
-	// FIXME: wizards follow the player again after world reload
-	private static void endAlliance(EntityWizard wizard) {
+	// FIXED: wizards follow the player again after world reload
+	private static void endAlliance(EntityPlayer player, EntityWizard wizard) {
 
 		for (EntityAITasks.EntityAITaskEntry entityaitasks$entityaitaskentry : wizard.tasks.taskEntries) {
 			EntityAIBase entityAIBase = entityaitasks$entityaitaskentry.action;
@@ -121,6 +121,8 @@ public class Covenant extends SpellRay {
 				wizard.tasks.removeTask(entityAIBase);
 			}
 		}
+		WizardData data = WizardData.get(player);
+  		data.setVariable(ALLIED_WIZARD_UUID_KEY, null);
 	}
 
 	private static void allyWithWizard(EntityPlayer player, EntityWizard wizard) {
